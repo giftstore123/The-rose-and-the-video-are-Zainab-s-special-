@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مملكة أفلانة: قصة عشق أبدية 🌸✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --p-dark: #ff4d94;
+            --p-main: #ffb3d9;
+            --p-light: #fff0f5;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+
+        /* تنسيق أساسي متجاوب لجميع الشاشات */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; user-select: none; }
+        body, html { height: 100%; width: 100%; overflow: hidden; background: #fff0f5; }
+
+        /* شاشة الدخول */
+        #splash-opener {
+            position: fixed; inset: 0; z-index: 10000; background: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease-out;
+        }
+
+        .heart-loader { font-size: 50px; animation: beat 1s infinite; color: var(--p-dark); margin-bottom: 20px; }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+
+        /* الحاوية الرئيسية */
+        .master-shell {
+            height: 100%; width: 100%; display: flex; justify-content: center; align-items: center;
+            background: radial-gradient(circle at center, #ffffff 0%, #ffe4e1 100%);
+            opacity: 0; transition: 1.5s ease-in;
+        }
+
+        .main-card-ui {
+            width: 95%; max-width: 480px; height: 92%; max-height: 820px;
+            background: var(--glass); backdrop-filter: blur(25px);
+            border: 5px solid white; border-radius: 50px;
+            display: flex; flex-direction: column; padding: 20px; gap: 15px;
+            box-shadow: 0 35px 70px rgba(255, 179, 217, 0.6);
+            position: relative; z-index: 10;
+        }
+
+        /* منطقة الفيديو السحرية */
+        .magic-video-frame {
+            flex: 1; position: relative; border-radius: 35px; overflow: hidden;
+            border: 4px solid var(--p-main); background: #000;
+            box-shadow: 0 0 30px var(--p-main); /* تأثير وهج الحب */
+            animation: glowPulse 2s infinite alternate;
+        }
+        @keyframes glowPulse { from { box-shadow: 0 0 20px var(--p-main); } to { box-shadow: 0 0 40px var(--p-dark); } }
+        
+        #promotional-video { width: 100%; height: 100%; object-fit: cover; }
+
+        /* الأزرار العاطفية */
+        .emotional-btns { display: flex; flex-direction: column; gap: 12px; }
+        .celebratory-btn {
+            background: white; border: 2px solid var(--p-main); padding: 18px;
+            border-radius: 25px; display: flex; align-items: center; gap: 18px;
+            cursor: pointer; box-shadow: 0 6px 0 var(--p-main); transition: 0.2s;
+            position: relative; overflow: hidden;
+        }
+
+        /* تأثير اللمعان الكيوت */
+        .celebratory-btn::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.8), transparent);
+            transform: rotate(45deg); transition: 0.6s; opacity: 0;
+        }
+        .celebratory-btn:hover::before { left: 100%; opacity: 1; }
+        .celebratory-btn:active { transform: translateY(6px); box-shadow: none; }
+        
+        .icon-holder { width: 45px; height: 45px; background: #fff0f5; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 2px solid var(--p-main); }
+
+        /* تأثير الورود عند اللمس 🌸 */
+        .touch-flower { position: fixed; pointer-events: none; z-index: 9999; animation: flyUp 1.2s forwards; }
+        @keyframes flyUp { to { transform: translate(var(--x), var(--y)) rotate(360deg); opacity: 0; } }
+
+        /* مشغل الموسيقى المخفي */
+        .sonic-bar { background: var(--p-dark); padding: 12px; border-radius: 25px; color: white; display: flex; align-items: center; gap: 12px; }
+        
+        #modal-hud { position: fixed; inset: 0; background: rgba(255, 179, 217, 0.9); z-index: 11000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
+        .hud-content { width: 90%; max-width: 400px; background: white; padding: 40px; border-radius: 45px; text-align: center; border: 5px solid var(--p-main); position: relative; }
+        .hud-content::after { content: '🌸'; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 30px; }
+
+        /* رسائل الحب الطائرة */
+        .flying-message {
+            position: fixed; color: var(--p-dark); font-weight: 900; font-size: 1.2rem;
+            z-index: 10001; pointer-events: none; opacity: 0;
+            animation: messageFly 4s linear;
+        }
+        @keyframes messageFly {
+            0% { opacity: 0; transform: translateY(100vh); }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-10vh) translateX(var(--drift)); }
+        }
+    </style>
+</head>
+<body onclick="createFlowerReaction(event)">
+
+    <div id="splash-opener">
+        <div class="heart-loader">💖</div>
+        <h1 style="color: var(--p-dark); margin-bottom: 20px;">جاهزة؟ يا أجمل أفلانة ✨</h1>
+        <button onclick="revealMagic()" style="padding: 18px 50px; border-radius: 40px; border: none; background: var(--p-dark); color: white; font-weight: bold; cursor: pointer; font-size: 1.4rem; box-shadow: 0 10px 30px rgba(255, 77, 148, 0.4);">افتحي قلبك 🌸</button>
+    </div>
+
+    <div class="master-shell" id="app-body">
+        <div class="main-card-ui">
+            <header style="text-align: center; border-bottom: 2px dashed var(--p-main); padding-bottom: 10px;">
+                <h2 style="color: var(--p-dark); font-size: 1.4rem;">مملكة أفلانة: وعد للأبد 🔒💖</h2>
+            </header>
+
+            <div class="magic-video-frame">
+                <video id="promotional-video" loop playsinline>
+                    <source src="video.mp4" type="video/mp4">
+                    متصفحك لا يدعم الفيديو.
+                </video>
+            </div>
+
+            <div class="emotional-btns">
+                
+                <div class="celebratory-btn" onclick="triggerP('أجمل صدفة 📅', 'بيوم [تاريخ حسب طلب الزبون] نص حسب طلب الزبون! ❤️')">
+                    <div class="icon-holder">📅</div>
+                    <div><h3 style="color: var(--p-dark); font-size: 1rem;">أجمل صدفة</h3><p style="font-size: 0.75rem; color: #888;">متى نورتي حياتي؟</p></div>
+                </div>
+
+                <div class="celebratory-btn" onclick="triggerP('وعد للأبد 💍', 'أوعدج يا أفلانة حسب طلب الزبون ! 🌸')">
+                    <div class="icon-holder">✨</div>
+                    <div><h3 style="color: var(--p-dark); font-size: 1rem;">وعد للأبد</h3><p style="font-size: 0.75rem; color: #888;">عهدي الج طول العمر</p></div>
+                </div>
+
+                <div class="celebratory-btn" onclick="triggerGrandCelebration()">
+                    <div class="icon-holder">🕯️</div>
+                    <div><h3 style="color: var(--p-dark); font-size: 1rem;">ذكرى عشقنا</h3><p style="font-size: 0.75rem; color: #888;">قصتنا بألف كلمة</p></div>
+                </div>
+
+            </div>
+
+            <div class="sonic-bar">
+                <span>🎵</span>
+                <div style="flex:1; height:5px; background:rgba(255,255,255,0.3); border-radius:2.5px; position:relative;">
+                    <div id="prog-fill" style="position:absolute; height:100%; background:white; width:0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-hud" onclick="closeHud()">
+        <div class="hud-content" onclick="event.stopPropagation()">
+            <h2 id="hudT" style="color: var(--p-dark); margin-bottom: 20px;"></h2>
+            <p id="hudB" style="color: #555; line-height: 1.8; font-size: 1.1rem; text-align: right;"></p>
+            <button onclick="closeHud()" style="margin-top: 25px; padding: 10px 30px; border-radius: 20px; border: none; background: var(--p-dark); color: white; font-weight: bold; cursor: pointer;">أغلقي يا جميلة 🌸</button>
+        </div>
+    </div>
+
+    <audio id="main-track" loop><source src="music.mp3" type="audio/mpeg"></audio>
+
+    <script>
+        // فتح الموقع وتشغيل المفاجأة التلقائية
+        function revealMagic() {
+            document.getElementById('main-track').play();
+            document.getElementById('promotional-video').play();
+            document.getElementById('splash-opener').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('splash-opener').style.display = 'none';
+                document.getElementById('app-body').style.opacity = '1';
+                // انفجار قلوب ترحيبي كثيف
+                fireDeepConfetti();
+                // بدء تشغيل رسائل الحب الطائرة
+                setInterval(spawnFlyingMessage, 3000);
+            }, 1000);
+        }
+
+        // نظام الورود عند اللمس 🌸
+        function createFlowerReaction(e) {
+            const flowers = ['🌸', '💖', '✨', '🌹', '🍬', '🍩'];
+            for(let i=0; i<6; i++) {
+                const el = document.createElement('div');
+                el.className = 'touch-flower';
+                el.innerText = flowers[Math.floor(Math.random()*flowers.length)];
+                el.style.left = e.clientX + 'px';
+                el.style.top = e.clientY + 'px';
+                el.style.fontSize = Math.random()*25 + 15 + 'px';
+                
+                // اتجاهات عشوائية للأعلى
+                const x = (Math.random() - 0.5) * 300;
+                const y = (Math.random() * -1) * 300;
+                el.style.setProperty('--x', x + 'px');
+                el.style.setProperty('--y', y + 'px');
+                
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1200);
+            }
+        }
+
+        // التحكم بالرسائل
+        function triggerP(t, b) {
+            document.getElementById('hudT').innerText = t;
+            document.getElementById('hudB').innerText = b;
+            document.getElementById('modal-hud').style.display = 'flex';
+            confetti({ particleCount: 50, colors: ['#ff4d94', '#ffffff'] });
+        }
+        function closeHud() { document.getElementById('modal-hud').style.display = 'none'; }
+
+        // شريط الموسيقى
+        const track = document.getElementById('main-track');
+        track.ontimeupdate = () => {
+            document.getElementById('prog-fill').style.width = (track.currentTime/track.duration*100) + "%";
+        };
+
+        // وظائف السعادة الإضافية الكثيفة
+        function fireDeepConfetti() {
+            confetti({ particleCount: 250, spread: 80, origin: { y: 0.6 }, colors: ['#ffb3d9', '#ff4d94', '#ffffff', '#e6f7ff'] });
+        }
+
+        // رسائل الحب الطائرة
+        const loveMsgs = ["أحبج حيل! ❤️", "يا عمري أنتِ 🥰", "أجمل صدفة ✨", "ملكة قلبي 👑", "وعد للأبد 🔒", "فديتج! 💖"];
+        function spawnFlyingMessage() {
+            if (document.getElementById('splash-opener').style.display !== 'none') return;
+            const el = document.createElement('div');
+            el.className = 'flying-message';
+            el.innerText = loveMsgs[Math.floor(Math.random()*loveMsgs.length)];
+            el.style.left = Math.random()*80 + 10 + 'vw';
+            el.style.setProperty('--drift', (Math.random()-0.5)*100 + 'px');
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 4000);
+        }
+
+        // زر الذكرى: الاحتفال الأكبر
+        function triggerGrandCelebration() {
+            const story = "ذكرى حسبب طلبب الزبون ❤️🌸✨";
+            triggerP('ذكرتنا 🕯️❤️', story);
+            
+            // سلسلة انفجارات سعادة كثيفة
+            fireDeepConfetti();
+            setTimeout(fireDeepConfetti, 500);
+            setTimeout(fireDeepConfetti, 1000);
+            
+            // تغيير مؤقت للخلفية
+            document.getElementById('app-body').style.background = 'radial-gradient(circle at center, #ffebf5 0%, #ffccf2 100%)';
+            setTimeout(() => {
+                document.getElementById('app-body').style.background = 'radial-gradient(circle at center, #ffffff 0%, #ffe4e1 100%)';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+
